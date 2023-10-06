@@ -6,11 +6,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
-import * as bcrypt from "bcrypt"; // Import bcrypt's compare function
+import * as bcrypt from "bcrypt";
 import { randomUUID } from "crypto";
 
 const maxAge = 30 * 24 * 60 * 60; // 30 days in seconds
-
 
 export const authOptions = {
   pages: {
@@ -20,11 +19,12 @@ export const authOptions = {
     verifyRequest: '/auth/verify-request',
     newUser: '/auth/new-user'
   },
-  // session: {
-  //   strategy: "jwt",
-  //   maxAge: maxAge,
-  //   updateAge: 24 * 60 * 60,
-  // },
+  session: {
+    strategy: "jwt",
+    maxAge: maxAge, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV !== "production",
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -73,42 +73,56 @@ export const authOptions = {
           }
         });
 
-        user = {
+        return {
           id: user.id,
           email: user.email,
           name: user.name,
           image: user.image,
           sessionToken: token,
         };
-        return user
-
       }
     })
   ],
   callbacks: {
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user }) {
       if (user) {
         token.userId = user.id;
         token.sessionToken = user.sessionToken;
       }
+      // if (token?.sessionToken) {
+      //   const { session } = await prisma.session.findFirst({
+      //     where: {
+      //       sessionToken: token.sessionToken
+      //     }
+      //   });
+      //   if (!session) {
+      //     return false;
+      //   }
+      // }
+      console.log("user", user)
+      console.log("token", token)
+
+      return token
+    },
+    async session({ session, user }) {
+      console.log("session", session)
+      // if (session.user) {
+      //   session.user.id = user.id;
+      // }
+
+      return session;
+    },
+  },
+
+  events: {
+    signOut: async ({ token, session }) => {
       if (token?.sessionToken) {
-        // Implement your session validation logic here
-        const { session } = await prisma.session.findFirst({
+        await prisma.session.delete({
           where: {
             sessionToken: token.sessionToken
           }
         });
-        if (!session) {
-          return false;
-        }
       }
-      return token
-    },
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-      }
-      return session;
     },
   },
 };

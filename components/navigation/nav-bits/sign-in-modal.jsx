@@ -4,7 +4,6 @@
 
 "use client";
 
-import SignInForm from "@/components/auth/sign-in-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,8 +17,6 @@ import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "next-auth/react";
-import { revalidatePath } from "next/cache";
-import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -28,12 +25,7 @@ const SignInModal = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
-  // document.addEventListener("keyup", function (event) {
-  //   event.preventDefault();
-  //   if (event.keyCode === 13) {
-  //     handleClick();
-  //   }
-  // });
+
   const router = useRouter();
 
   const handleClick = async () => {
@@ -45,17 +37,18 @@ const SignInModal = () => {
 
     if (result.ok) {
       router.refresh();
-      // setOpen(false);
+      setOpen(false);
     }
     if (result.error) setError(result.error);
   };
   return (
-    // <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-    <Dialog>
-      <DialogTrigger className="py-2.5 px-4 text-sm rounded-lg whitespace-nowrap bg-neutral-50 dark:bg-slate-900">
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+      {/* <Dialog> */}
+      <DialogTrigger className="py-2.5 px-4 text-sm rounded-lg whitespace-nowrap  border border-neutral-300 font-semibold">
         Sign-In
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-sm w-full flex flex-col gap-4">
+        {/* <div className="max-w-sm w-full flex flex-col gap-4"> */}
         <DialogHeader>
           <DialogTitle>Are you sure absolutely sure?</DialogTitle>
           <DialogDescription>
@@ -92,23 +85,22 @@ const SignInModal = () => {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="px-2 bg-background text-muted-foreground">
+            <span className="px-2 bg-background text-muted-foreground bg-white dark:bg-neutral-900">
               Or continue with
             </span>
           </div>
         </div>
-        <DialogHeader>
-          <div className="grid grid-cols-2 gap-6">
-            <Button variant="outline">
-              <Icons.gitHub className="w-4 h-4 mr-2" />
-              Github
-            </Button>
-            <Button variant="outline" onClick={() => signIn("google")}>
-              <Icons.google className="w-4 h-4 mr-2" />
-              Google
-            </Button>
-          </div>
-        </DialogHeader>
+        <div className="grid grid-cols-2 gap-6">
+          <Button variant="outline">
+            <Icons.gitHub className="w-4 h-4 mr-2" />
+            Github
+          </Button>
+          <Button variant="outline" onClick={() => signIn("google")}>
+            <Icons.google className="w-4 h-4 mr-2" />
+            Google
+          </Button>
+        </div>
+        {/* </div> */}
       </DialogContent>
     </Dialog>
   );

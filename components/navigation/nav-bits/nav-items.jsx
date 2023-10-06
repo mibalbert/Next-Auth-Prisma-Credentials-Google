@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const NavItems = ({ session }) => {
   const { topNav } = session
-    ? getNavigationConfig(session.user.role)
+    ? getNavigationConfig(session?.user?.role)
     : getNavigationConfig("GUEST");
 
   return (

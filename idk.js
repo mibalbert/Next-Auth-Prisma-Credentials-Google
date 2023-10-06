@@ -82,7 +82,12 @@ export const authOptions = {
         token.sessionToken = user.sessionToken;
       }
       if (token?.sessionToken) {
-        const { session } = await client.getSessionAndUser(token.sessionToken);
+        const session = await prisma.session.findFirst({
+          where: {
+            sessionToken: token.sessionToken
+          }
+        });
+        console.log(session)
         if (!session) {
           return null;
         }
@@ -93,7 +98,11 @@ export const authOptions = {
   events: {
     signOut: async ({ token, session }) => {
       if (token?.sessionToken) {
-        await client.deleteSession(token.sessionToken);
+        await client.session.finFirst({
+          where: {
+            sessionToken: token.sessionToken
+          }
+        });
       }
     },
   },

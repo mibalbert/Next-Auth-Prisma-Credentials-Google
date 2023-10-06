@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className="transition-transform duration-50">
         <NextAuthProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <main>

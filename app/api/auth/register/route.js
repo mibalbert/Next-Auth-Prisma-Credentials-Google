@@ -25,7 +25,9 @@ function generateAccessToken(userId) {
 export async function POST(request) {
   try {
     const { data } = await request.json();
+
     const { email, firstName, lastName, password } = data;
+
     const user = await prisma.user.findFirst({
       where: {
         email: email,

@@ -2,18 +2,30 @@
  * main-nav.jsx
  */
 
-// "use client";
+"use client";
+
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { ModeToggle } from "./nav-bits/theme-chooser";
 
 import UserDropdown from "./nav-bits/user-dropdown";
 import NavItems from "./nav-bits/nav-items";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import { ModeToggle } from "./nav-bits/theme-chooser";
-import { Button } from "../ui/button";
 import SignInModal from "./nav-bits/sign-in-modal";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
-const MainNav = async () => {
-  const session = await getServerSession(authOptions);
+const MainNav = () => {
+  // const session = await getServerSession(authOptions);
+
+  const { data: session } = useSession();
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  if (pathname.includes("/auth")) {
+    return <></>;
+  }
 
   return (
     <section className="flex items-center w-full border-b h-14 border-slate-200 dark:border-slate-800">
@@ -24,7 +36,20 @@ const MainNav = async () => {
         <div className="flex gap-4">
           <NavItems session={session} />
           <ModeToggle />
-          {session?.user ? <UserDropdown /> : <SignInModal />}
+          {session?.user ? (
+            <UserDropdown />
+          ) : (
+            <div className="flex gap-2">
+              <SignInModal />
+              <Button
+                onClick={() => router.push("/auth/register")}
+                variant="outline"
+                className="border-neutral-300"
+              >
+                Register
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>
