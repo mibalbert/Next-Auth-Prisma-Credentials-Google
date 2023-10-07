@@ -8,6 +8,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import * as bcrypt from "bcrypt";
 import { randomUUID } from "crypto";
+import { profile } from "console";
 
 const maxAge = 30 * 24 * 60 * 60; // 30 days in seconds
 
@@ -39,7 +40,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        let user = await prisma.user.findUnique({
+        let user = await prisma.User.findUnique({
           where: {
             email: credentials.email,
           },
@@ -48,6 +49,7 @@ export const authOptions = {
             email: true,
             name: true,
             password: true,
+            role: true,
             accounts: {
               select: {
                 provider: true,
@@ -65,63 +67,61 @@ export const authOptions = {
           throw new Error("Invalid credentials");
         }
         const token = randomUUID();
-        await prisma.session.create({
+        const oo = await prisma.Session.create({
           data: {
             userId: user.id,
             expires: new Date(Date.now() + maxAge * 1000),
             sessionToken: token,
           }
         });
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          sessionToken: token,
-        };
+        if (oo) {
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            image: user.image,
+            sessionToken: token,
+            sessionId: oo.id
+          };
+        }
       }
     })
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.userId = user.id;
-        token.sessionToken = user.sessionToken;
+        token = {
+          ...token,
+          id: user.id,
+          role: user.role,
+          sessionToken: user.sessionToken,
+          sessionId: user.sessionId
+        }
       }
-      // if (token?.sessionToken) {
-      //   const { session } = await prisma.session.findFirst({
-      //     where: {
-      //       sessionToken: token.sessionToken
-      //     }
-      //   });
-      //   if (!session) {
-      //     return false;
-      //   }
-      // }
-      console.log("user", user)
-      console.log("token", token)
-
       return token
     },
-    async session({ session, user }) {
-      console.log("session", session)
-      // if (session.user) {
-      //   session.user.id = user.id;
-      // }
-
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+        // session.user.se = token.role;
+      }
       return session;
     },
   },
 
   events: {
-    signOut: async ({ token, session }) => {
+    signOut: async ({ token }) => {
+      console.log("TOKENNNNNNNN", token)
       if (token?.sessionToken) {
-        await prisma.session.delete({
+        const ooo = await prisma.Session.delete({
           where: {
+            id: token.sessionId,
             sessionToken: token.sessionToken
           }
         });
+        console.log(ooo)
       }
     },
   },

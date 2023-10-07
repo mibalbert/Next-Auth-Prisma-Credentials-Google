@@ -28,7 +28,7 @@ const MainNav = () => {
   }
 
   return (
-    <section className="flex items-center w-full border-b h-14 border-slate-200 dark:border-slate-800">
+    <section className="flex items-center w-full h-14 ">
       <div className="flex justify-between w-full mx-auto max-w-7xl">
         <div className="flex items-center">
           <div className="text-lg font-bold ">Logo</div>

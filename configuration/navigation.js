@@ -10,109 +10,37 @@ const navigationConfig = {
       href: "/",
     },
     {
-      title: "About Us",
+      title: "About",
       href: "/about",
-    },
-    {
-      title: "Products",
-      href: "/products",
-    },
-    {
-      title: "Services",
-      href: "/services",
-    },
-    {
-      title: "Contact Us",
-      href: "/contact",
-    },
-    {
-      title: "Blog",
-      href: "/blog",
-    },
-    {
-      title: "FAQ",
-      href: "/faq",
     },
   ],
   userTopNav: [
     {
-      title: "Dashboard",
-      href: "/user/dashboard",
-    },
-    {
-      title: "Profile",
-      href: "/user/profile",
-    },
-    {
-      title: "Cart",
-      href: "/cart",
-    },
-    {
-      title: "Settings",
-      href: "/user/settings",
-    },
-    {
-      title: "Logout",
-      href: "/user/logout",
+      title: "Home",
+      href: "/user/home",
     },
   ],
   userSideNav: [
     {
-      title: "Home",
+      title: "Example",
       data: [{
-        title: "Dashboard",
-        href: "/user/dashboard",
+        title: "Home",
+        href: "/user/home",
       },
       ]
     },
     {
-      title: "Jobs",
+      title: "Example",
       data: [{
-        title: "Jobs",
-        href: "/user/jobs",
+        title: "Example - One",
+        href: "/user/example-one",
       },
       {
-        title: "+Create Job",
-        href: "/user/create-job"
+        title: "Example - Two",
+        href: "/user/example-two"
       },
       ],
-    },
-    {
-      title: "Cars",
-      data: [{
-        title: "Cars",
-        href: "/user/cars",
-      },
-      {
-        title: "+Add a new Car",
-        href: "/user/add-new-car"
-      },
-      ],
-    },
-    {
-      title: "Documents",
-      data: [{
-        title: "Quotes",
-        href: "/user/quotes",
-      },
-      {
-        title: "Invoices",
-        href: "/user/invoices"
-      },
-      {
-        title: "Payments",
-        href: "/user/payments"
-      }
-      ]
-    },
-    {
-      title: "Support",
-      data: [{
-        title: "Help Desk",
-        href: "/user/help",
-      },
-      ]  // disabled: true,
-    },
+    }
   ],
 };
 

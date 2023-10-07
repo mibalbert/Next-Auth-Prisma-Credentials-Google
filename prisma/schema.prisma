@@ -47,8 +47,14 @@ model User {
   password      String?
   emailVerified DateTime?
   image         String?
+  role          UserRole?
   accounts      Account[]
   sessions      Session[]
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 model VerificationToken {

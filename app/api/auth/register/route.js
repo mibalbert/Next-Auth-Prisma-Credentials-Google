@@ -48,6 +48,7 @@ export async function POST(request) {
         email: email,
         name: `${firstName} ${lastName}`,
         password: hash,
+        role: "USER"
       },
     });
     let account
@@ -68,7 +69,7 @@ export async function POST(request) {
       });
     }
     if (account) {
-      return NextResponse.json({ message: 'Success!', user, account }, { status: 200 });
+      return NextResponse.json({ message: 'Success!', newUser, account }, { status: 200 });
     } else {
       // Handle account creation error
       console.error('Account creation failed');
