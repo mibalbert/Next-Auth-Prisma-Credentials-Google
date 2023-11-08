@@ -19,10 +19,12 @@ export default async function Home() {
     });
   }
 
+  const data = await prisma.Account.findMany();
+
   return (
-    <main className="w-full min-h-[calc(100vh-7.5rem)] pattern-grid inner-shadow flex items-center justify-center">
-      <div className="grid items-center w-full grid-cols-3 gap-10 mx-auto max-w-[250px] sm:max-w-xs lg:max-w-lg md:gap-20 xl:max-w-3xl 2xl:max-w-4xl">
-        <Icons.nextjs13 className="flex items-center justify-center col-span-3 lg:col-span-1" />
+    <main className="w-full min-h-[calc(100vh-7.5rem)] pattern-grid  flex flex-col items-center justify-center">
+      <div className="grid items-center w-full  xl:grid-cols-3 gap-10 mx-auto  md:gap-20 max-w-[100px] xl:max-w-3xl 2xl:max-w-4xl">
+        <Icons.nextjs13 className="flex items-center justify-center col-span-3 lg:col-span-1 " />
         <Icons.prisma className="flex items-center justify-center col-span-3 lg:col-span-1" />
         <div className="relative flex items-center justify-center col-span-3 lg:col-span-1">
           <Image
@@ -33,14 +35,21 @@ export default async function Home() {
             className="object-cover w-full h-full scale-125"
           />
         </div>
+      </div>
+      <div className="flex w-full pl-10">
+        <div className="w-full max-w-md overflow-hidden ">
+          <div>{`Account Find Many`}</div>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+
         {session && (
-          <div>
+          <div className="w-full max-w-md">
             <div>{`Web Session`}</div>
             <pre>{JSON.stringify(session, null, 2)}</pre>
           </div>
         )}
         {session && (
-          <div>
+          <div className="w-full max-w-md">
             <div>{`DB Session`}</div>
             <pre>{JSON.stringify(sess, null, 2)}</pre>
           </div>

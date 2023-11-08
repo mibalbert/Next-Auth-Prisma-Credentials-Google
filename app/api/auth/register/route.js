@@ -3,16 +3,19 @@
  */
 
 
-import prisma from '@/lib/prisma'
 import { NextResponse } from 'next/server'
-import * as bcrypt from 'bcrypt';
+import prisma from '@/lib/prisma'
+import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 
-const expiresInDays = 30; // Token expires in 30 days
+const expiresInDays = 30;
 
 function generateAccessToken(userId) {
-  const secretKey = process.env.JWT_SECRET || 'yourSecretKey'; // Replace 'yourSecretKey' with your actual secret key or provide a default value
-  const expiresIn = `${expiresInDays}d`; // Token expires in 30 days
+
+  const secretKey = process.env.JWT_SECRET || 'yourSecretKey';
+  const expiresIn = `${expiresInDays}d`;
 
   const payload = {
     userId: userId,
@@ -24,8 +27,7 @@ function generateAccessToken(userId) {
 
 export async function POST(request) {
   try {
-    const { data } = await request.json();
-
+    const data = await request.json();
     const { email, firstName, lastName, password } = data;
 
     const user = await prisma.user.findFirst({
@@ -35,7 +37,7 @@ export async function POST(request) {
     });
 
     if (user) {
-      return NextResponse.json({ message: 'User already registered' }, { status: 200 });
+      return NextResponse.json({ message: 'Email already used, try using a diffrent email!', success: false }, { status: 200 });
     }
 
     const salt = bcrypt.genSaltSync(10);
@@ -68,15 +70,49 @@ export async function POST(request) {
         },
       });
     }
+
     if (account) {
-      return NextResponse.json({ message: 'Success!', newUser, account }, { status: 200 });
+
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.NODEMAILER_ADMIN_EMAIL,
+          pass: process.env.NODEMAILER_ADMIN_PASS
+        }
+      });
+      const token = await prisma.activateToken.create({
+        data: {
+          userId: newUser.id,
+          token: `${uuidv4()}${uuidv4()}`.replace(/-/g, ''),
+        },
+      })
+
+      const mailOptions = {
+        from: `Email Activation Token <${process.env.NODEMAILER_ADMIN_EMAIL}>`,
+        to: `${email}`,
+        subject: 'Activate your Email now to enjoy all the benefits of ....',
+        text: `That was easy! http://localhost:3000/auth/activate/${token.token}`,
+      };
+      return new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.error('Error occurred:', error);
+            reject(NextResponse.json({ message: 'Error occurred: ' + error.message, success: false, status: 500 }));
+          } else {
+            console.log('Email sent successfully:', info.response);
+            resolve(NextResponse.json({ message: 'Verification Email sent successfully. Check out your inbox!', success: true, status: 200 }));
+          }
+        });
+      });
+
     } else {
-      // Handle account creation error
       console.error('Account creation failed');
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+      return NextResponse.json({ error: 'Internal Server Error', success: false }, { status: 500 });
     }
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', success: false }, { status: 500 });
   }
 }

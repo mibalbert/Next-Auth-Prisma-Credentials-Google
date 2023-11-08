@@ -10,8 +10,8 @@ const navigationConfig = {
       href: "/",
     },
     {
-      title: "About",
-      href: "/about",
+      title: "Sign-In Page",
+      href: "/auth/sign-in",
     },
   ],
   userTopNav: [

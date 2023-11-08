@@ -9,6 +9,8 @@ import MainNav from "@/components/navigation/main-nav";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import QueryProvider from "@/components/providers/query-provider";
+import WindowHistory from "@/components/providers/window-history";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -25,10 +27,14 @@ export default function RootLayout({ children }) {
       <body className="transition-transform duration-50">
         <NextAuthProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <main>
-              <MainNav />
-              {children}
-            </main>
+            <QueryProvider>
+              {/* <WindowHistory> */}
+              <main className="">
+                <MainNav />
+                {children}
+              </main>
+              {/* </WindowHistory> */}
+            </QueryProvider>
           </ThemeProvider>
         </NextAuthProvider>
       </body>
