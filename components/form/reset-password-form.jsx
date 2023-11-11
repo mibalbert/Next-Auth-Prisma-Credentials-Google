@@ -3,9 +3,7 @@
  */
 
 const ResetPasswordForm = () => {
-  return (
-    <div>ResetPasswordForm</div>
-  )
-}
+  return <div>ResetPasswordForm</div>;
+};
 
-export default ResetPasswordForm
+export default ResetPasswordForm;

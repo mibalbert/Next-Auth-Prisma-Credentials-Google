@@ -13,7 +13,9 @@ import { getNavigationConfig } from "@/configuration/navigation";
 const SideNav = ({ className, session }) => {
   const pathname = usePathname();
 
+  console.log(session);
   const { sideNav } = getNavigationConfig(session?.user?.role);
+  console.log("sidenav", sideNav);
 
   return (
     <section className={cn("h-full w-full  bg-card/40 ", className)}>

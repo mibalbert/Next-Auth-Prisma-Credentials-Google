@@ -1,4 +1,3 @@
-
 import { randomUUID } from "crypto";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { Prisma } from "@prisma/client";
@@ -9,8 +8,7 @@ import isEmail from "validator/lib/isEmail";
 
 import { prisma } from "@acme/db";
 
-
-export const providers = ["email", "discord"]
+export const providers = ["email", "discord"];
 
 const client = PrismaAdapter(prisma);
 
@@ -67,9 +65,7 @@ const EmailCredentials = CredentialsProvider({
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   adapter: client,
-  providers: [
-    EmailCredentials
-  ],
+  providers: [EmailCredentials],
   session: {
     strategy: "jwt",
     maxAge: maxAge, // 30 days
@@ -84,24 +80,24 @@ export const authOptions = {
       if (token?.sessionToken) {
         const session = await prisma.session.findFirst({
           where: {
-            sessionToken: token.sessionToken
-          }
+            sessionToken: token.sessionToken,
+          },
         });
-        console.log(session)
+        console.log(session);
         if (!session) {
           return null;
         }
       }
       return token;
-    }
+    },
   },
   events: {
     signOut: async ({ token, session }) => {
       if (token?.sessionToken) {
         await client.session.finFirst({
           where: {
-            sessionToken: token.sessionToken
-          }
+            sessionToken: token.sessionToken,
+          },
         });
       }
     },

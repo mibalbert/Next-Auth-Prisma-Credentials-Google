@@ -10,7 +10,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import QueryProvider from "@/components/providers/query-provider";
-import WindowHistory from "@/components/providers/window-history";
+// import WindowHistory from "@/components/providers/window-history";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -24,16 +24,14 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className="transition-transform duration-50">
+      <body className="bg-black transition-transform duration-200">
         <NextAuthProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <QueryProvider>
-              {/* <WindowHistory> */}
               <main className="">
                 <MainNav />
                 {children}
               </main>
-              {/* </WindowHistory> */}
             </QueryProvider>
           </ThemeProvider>
         </NextAuthProvider>

@@ -29,7 +29,7 @@ const SendPasswordReset = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email }),
-        }
+        },
       );
       const res = await response.json();
       if (res.ok) {

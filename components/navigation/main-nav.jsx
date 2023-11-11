@@ -14,6 +14,7 @@ import SignInModal from "./nav-bits/sign-in-modal";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 const MainNav = () => {
   // const session = await getServerSession(authOptions);
@@ -28,13 +29,15 @@ const MainNav = () => {
   }
 
   return (
-    <section className="flex items-center w-full h-14 ">
-      <div className="flex justify-between w-full mx-auto max-w-7xl">
+    <section className="dark:supports-backdrop-blur:bg-black/30 supports-backdrop-blur:bg-white/30 sticky top-0 z-50 m-0 flex h-14 w-full items-center border-black/5 bg-gray-50/60 p-0 shadow-sm shadow-gray-300 backdrop-blur-md dark:border-white/5 dark:bg-black/60 dark:shadow-gray-800">
+      <div className="mx-auto flex w-full max-w-7xl justify-between">
         <div className="flex items-center">
-          <div className="text-lg font-bold ">Logo</div>
+          <Link href="/" className="text-lg font-bold ">
+            Logo
+          </Link>
         </div>
         <div className="flex gap-4">
-          <NavItems session={session} />
+          <NavItems session={session} pathname={pathname} />
           <ModeToggle />
           {session?.user ? (
             <UserDropdown />

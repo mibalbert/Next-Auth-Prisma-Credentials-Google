@@ -8,7 +8,11 @@ import { getServerSession } from "next-auth/next";
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
-  return <div>User Home Page</div>;
+  return (
+    <div>
+      <div>User Home Page</div>
+    </div>
+  );
 };
 
 export default Home;

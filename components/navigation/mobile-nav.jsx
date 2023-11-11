@@ -55,7 +55,7 @@ export function MobileNav({ session }) {
                   >
                     {item.title}
                   </MobileLink>
-                )
+                ),
             )}
           </div>
           <div className="flex flex-col space-y-2">

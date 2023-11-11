@@ -2,32 +2,29 @@
  * actions.js
  */
 
-'use server'
-
+"use server";
 
 export async function loginUser(prevState, formData) {
   try {
-
-    return { message: "WING" }
-
+    return { message: "WING" };
   } catch (error) {
-    console.log(error)
-    return { message: error }
+    console.log(error);
+    return { message: error };
   }
 }
 
 export async function registerNewUser(formData) {
   try {
-    const res = await fetch('http://localhost:3000/api/auth/register', {
+    const res = await fetch("http://localhost:3000/api/auth/register", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     });
 
     const data = await res.json();
-    return data
+    return data;
   } catch (error) {
     console.error("Error:", error);
     return { message: "Something went wrong on the server" };
