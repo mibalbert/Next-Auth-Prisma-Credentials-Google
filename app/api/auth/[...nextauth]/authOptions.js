@@ -8,6 +8,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { randomUUID } from "crypto";
 import * as bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 export const authOptions = {
   pages: {
@@ -19,11 +20,12 @@ export const authOptions = {
   },
   session: {
     strategy: "jwt",
-    // maxAge: 30 * 24 * 60 * 60, // 30 days
-    // updateAge: 24 * 60 * 60, // 24 hours
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV !== "production",
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -37,48 +39,52 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          return null;
-        }
-        let user = await prisma.user.findFirst({
-          where: {
-            email: credentials.email,
-          },
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            password: true,
-            active: true,
-            role: true,
-            account: {
-              select: {
-                provider: true,
+        try {
+          if (!credentials?.email || !credentials.password) {
+            return null;
+          }
+          let user = await prisma.user.findFirst({
+            where: {
+              email: credentials.email,
+            },
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              password: true,
+              active: true,
+              role: true,
+              account: {
+                select: {
+                  provider: true,
+                },
               },
             },
-          },
-        });
-        if (!user) {
-          throw new Error("Email not registered!");
+          });
+          if (!user) {
+            throw new Error("Email not registered!");
+          }
+          if (user && user?.account?.provider === "google") {
+            throw new Error(
+              "Email used to sign-in with Google, use that instead",
+            );
+          }
+          if (!(await bcrypt.compare(credentials.password, user.password))) {
+            throw new Error("Invalid credentials");
+          }
+          if (!user.active) {
+            throw new Error("Email is not verified");
+          }
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            image: user.image,
+          };
+        } catch (error) {
+          throw new Error(error)
         }
-        if (user && user.account.provider === "google") {
-          throw new Error(
-            "Email used to sign-in with Google, use that instead",
-          );
-        }
-        if (!(await bcrypt.compare(credentials.password, user.password))) {
-          throw new Error("Invalid credentials");
-        }
-        if (!user.active) {
-          throw new Error("Email is not verified");
-        }
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          image: user.image,
-        };
       },
     }),
   ],

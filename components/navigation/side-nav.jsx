@@ -12,20 +12,17 @@ import { getNavigationConfig } from "@/configuration/navigation";
 
 const SideNav = ({ className, session }) => {
   const pathname = usePathname();
-
-  console.log(session);
   const { sideNav } = getNavigationConfig(session?.user?.role);
-  console.log("sidenav", sideNav);
 
   return (
-    <section className={cn("h-full w-full  bg-card/40 ", className)}>
-      <div className="flex w-full px-6 py-6">
-        <div className="relative grid w-full grid-flow-row gap-2 text-sm auto-rows-max ">
-          <div className="absolute left-0 w-full h-full">
+    <section className={cn(" h-full  w-full ", className)}>
+      <div className="flex w-full py-6">
+        <div className="relative grid w-full grid-flow-row auto-rows-max gap-2 text-sm ">
+          <div className="absolute left-0 h-full w-full max-w-[80%]">
             {sideNav &&
               sideNav.map((item, index) => (
-                <div key={index}>
-                  <div className="text-xl font-semibold text-neutral-800 dark:text-neutral-400">
+                <div key={index} className="my-2 space-y-2">
+                  <div className="text-xl font-semibold text-gray-800 dark:text-gray-400 ">
                     {item.title}
                   </div>
                   {item.data && item.data.length > 0 ? (
@@ -35,7 +32,7 @@ const SideNav = ({ className, session }) => {
                           <Link
                             href={subItem.href}
                             className={cn(
-                              "relative flex w-full items-center  rounded-md px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-600"
+                              "relative flex w-full items-center  rounded-md px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600",
                             )}
                           >
                             <div

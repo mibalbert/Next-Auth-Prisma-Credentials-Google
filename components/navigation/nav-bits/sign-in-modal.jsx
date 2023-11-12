@@ -13,21 +13,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-const SignInModal = () => {
+const SignInModal = ({ className }) => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-      <DialogTrigger className="py-2.5 px-4 text-sm rounded-lg whitespace-nowrap  border border-neutral-300 font-semibold">
+      <DialogTrigger
+        className={cn(
+          "whitespace-nowrap rounded-lg bg-black px-4 text-sm font-semibold text-white shadow-md dark:bg-white dark:text-black",
+          className,
+        )}
+      >
         Sign-In Modal
       </DialogTrigger>
-      <DialogContent className="flex flex-col w-full max-w-md gap-4 p-12">
-        <DialogHeader className={"pb-5"}>
-          <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+      <DialogContent className="flex w-full max-w-md flex-col gap-4 p-12">
+        <DialogHeader className={"space-y-3 pb-5 "}>
+          <DialogTitle className="text-center">
+            Welcome to the platform!
+          </DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            {`Sign in securely for a personalized experience. Your privacy is our priority. Excited to have you on board!`}
           </DialogDescription>
         </DialogHeader>
         <SignInForm setOpen={setOpen} />

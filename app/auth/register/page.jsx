@@ -5,7 +5,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { signIn } from "next-auth/react";
@@ -16,10 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FaArrowLeft } from "react-icons/fa6";
 
-import {
-  registerNewUser,
-  resendVerificationLinkServer,
-} from "@/app/actions/actions";
+import { registerNewUser } from "@/app/actions/actions";
 
 import Link from "next/link";
 
@@ -27,11 +23,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(null);
-  const router = useRouter();
-
-  // const handleGoBack = () => {
-  //   router.back(); // This navigates back to the previous page in the history stack
-  // };
 
   const {
     watch,
@@ -66,26 +57,25 @@ const Register = () => {
   };
 
   return (
-    <div className="relative flex justify-center w-full h-full min-h-screen">
+    <div className="relative flex h-full min-h-screen w-full justify-center">
       <Link
         href={"/"}
         variant="none"
-        // onClick={handleGoBack}
-        className="absolute top-[5%] left-[5%] flex gap-1  group items-center"
+        className="group absolute left-[5%] top-[5%] flex  items-center gap-1"
       >
-        <FaArrowLeft className="group-hover:translate-x-[-3px] transform transition-transform w-2 h-2" />
-        <span className="group-hover:underline underline-offset-4 group-hover:scale-105 transition-all pb-0.5 text-md duration-300">
+        <FaArrowLeft className="h-2 w-2 transform transition-transform group-hover:translate-x-[-3px]" />
+        <span className="text-md pb-0.5 underline-offset-4 transition-all duration-300 group-hover:scale-105 group-hover:underline">
           Back
         </span>
       </Link>
-      <section className="grid items-center w-full h-full min-h-screen grid-cols-12">
+      <section className="grid h-full min-h-screen w-full grid-cols-12 items-center">
         <div className="col-span-9">
           {!success ? (
             <form
               onSubmit={handleSubmit(registerUser)}
-              className="flex flex-col w-full max-w-md gap-4 p-10 mx-auto rounded-xl"
+              className="mx-auto flex w-full max-w-md flex-col gap-4 rounded-xl p-10"
             >
-              <h1 className="text-2xl font-semibold text-center">Register</h1>
+              <h1 className="text-center text-2xl font-semibold">Register</h1>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -93,7 +83,7 @@ const Register = () => {
                   type="email"
                   name="email"
                   placeholder="ex: john@example.com"
-                  className="placeholder:text-neutral-300 border-neutral-400"
+                  className="border-neutral-400 placeholder:text-neutral-300"
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -114,7 +104,7 @@ const Register = () => {
                   type="text"
                   name="firstName"
                   placeholder="ex: John"
-                  className="placeholder:text-neutral-300 border-neutral-400"
+                  className="border-neutral-400 placeholder:text-neutral-300"
                   {...register("firstName", {
                     required: "First Name is required",
                   })}
@@ -131,7 +121,7 @@ const Register = () => {
                   type="text"
                   name="lastName"
                   placeholder="ex: Doe"
-                  className="placeholder:text-neutral-300 border-neutral-400"
+                  className="border-neutral-400 placeholder:text-neutral-300"
                   {...register("lastName", {
                     required: "Last Name is required",
                   })}
@@ -148,7 +138,7 @@ const Register = () => {
                   type="password"
                   name="password"
                   placeholder="*******"
-                  className="placeholder:text-neutral-300 border-neutral-400"
+                  className="border-neutral-400 placeholder:text-neutral-300"
                   {...register("password", {
                     required: "Password is required",
                     minLength: {
@@ -168,7 +158,7 @@ const Register = () => {
                   type="password"
                   name="confirmPassword"
                   placeholder="*******"
-                  className="placeholder:text-neutral-300 border-neutral-400"
+                  className="border-neutral-400 placeholder:text-neutral-300"
                   {...register("confirmPassword", {
                     required: "Confirm Password is required",
                     minLength: {
@@ -189,7 +179,7 @@ const Register = () => {
               {error && (
                 <div className="flex items-center gap-1">
                   <Icons.failed
-                    className="w-5 h-5 text-red-500"
+                    className="h-5 w-5 text-red-500"
                     strokeWidth={2.5}
                   />
                   <div className="text-red-500">{error}</div>
@@ -202,7 +192,7 @@ const Register = () => {
                 ) : (
                   <span className="flex items-center gap-1">
                     Register
-                    <Icons.spinner className="w-4 h-4 animate-spin" />
+                    <Icons.spinner className="h-4 w-4 animate-spin" />
                   </span>
                 )}
               </Button>
@@ -211,7 +201,7 @@ const Register = () => {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="px-2 bg-white bg-background text-muted-foreground dark:bg-neutral-900">
+                  <span className="bg-background text-muted-foreground bg-white px-2 dark:bg-neutral-900">
                     Or continue with
                   </span>
                 </div>
@@ -223,21 +213,21 @@ const Register = () => {
                   className="w-full"
                   onClick={() => signIn("google")}
                 >
-                  <Icons.google className="w-4 h-4 mr-2" />
+                  <Icons.google className="mr-2 h-4 w-4" />
                   Google
                 </Button>
               </div>
             </form>
           ) : (
-            <div className="w-full max-w-md mx-auto space-y-3">
+            <div className="mx-auto w-full max-w-md space-y-3">
               <div className="flex items-center gap-2">
                 <Icons.success
-                  className="w-4 h-4 text-green-500"
+                  className="h-4 w-4 text-green-500"
                   strokeWidth={3}
                 />
                 <div>{success}</div>
               </div>
-              <div className="flex items-center justify-center w-full">
+              <div className="flex w-full items-center justify-center">
                 <Link href={"/auth/sign-in"} className="underline ">
                   Sign In
                 </Link>
@@ -245,7 +235,7 @@ const Register = () => {
             </div>
           )}
         </div>
-        <div className="w-full h-full col-span-3 bg-neutral-300">
+        <div className="col-span-3 h-full w-full bg-neutral-300">
           ASdasdasdas
         </div>
       </section>

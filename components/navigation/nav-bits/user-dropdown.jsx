@@ -20,17 +20,14 @@ const UserDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="">
-        <Avatar className="w-8 h-8 m-2">
+        <Avatar className="m-2 h-8 w-8">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
+        {/* <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator /> */}
         <DropdownMenuItem onClick={async () => await signOut()}>
           Sign Out
         </DropdownMenuItem>

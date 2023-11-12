@@ -5,50 +5,42 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from "next-auth";
 import Card from "@/components/home/card";
-import prisma from "@/lib/prisma";
 
 const CardGroup = async () => {
-  const session = await getServerSession(authOptions);
+  const webSession = await getServerSession(authOptions);
 
-  const sess = await prisma.session.findMany({
-    where: {
-      userId: session?.user?.id,
+  const response = await fetch(
+    "http://localhost:3000/api/user/get-db-session",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: webSession?.user?.id }),
     },
-  });
-
-  const data = await prisma.User.findFirst({
-    where: {
-      email: session?.user?.email,
-    },
-    include: {
-      account: true,
-    },
-  });
+  );
+  const dbSession = await response.json();
 
   return (
-    <div className="grid w-full max-w-screen-xl grid-cols-2 gap-10 mx-auto">
+    <div className="mx-auto grid w-[90%] max-w-screen-xl grid-cols-1 gap-10 lg:w-full lg:grid-cols-2">
       <Card
-        tag={"Account"}
-        title={"Account Model stored in DB"}
+        tag={"Session (JWT)"}
+        title={"Browser Stored Session"}
         description={
           "This is the JSON data stored in the db about the account of the logged-in user."
         }
-        data={{
-          ...data[0],
-          account: "",
-          password: data[0]?.password.slice(0, 10) + "...",
-        }}
+        data={webSession}
+        href={"/user/web-session"}
       />
       <Card
-        tag={"Account"}
-        title={"Account Model stored in DB"}
+        tag={"Session (SQL)"}
+        title={"Database Stored Session"}
         description={
           "This is the JSON data stored in the db about the account of the logged-in user."
         }
-        data={data[0]?.account}
+        data={dbSession.data}
+        href={"/user/db-session"}
       />
-      <Card tag={"Account"} title={"Account Model stored in DB"} />
-      <Card tag={"Account"} title={"Account Model stored in DB"} />
     </div>
   );
 };

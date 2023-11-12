@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className="bg-black transition-transform duration-200">
+      <body className="transition-transform duration-200 dark:bg-black">
         <NextAuthProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <QueryProvider>

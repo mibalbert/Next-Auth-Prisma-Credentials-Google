@@ -22,7 +22,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import SendPasswordReset from "./send-reset-password";
 import SendEmailActivate from "./send-email-activate";
 
-const SignInForm = ({ setOpen }) => {
+const SignInForm = ({ setOpen, className }) => {
   const { data: session, status } = useSession();
 
   const [responseObj, setResponseObj] = useState({ message: "", ok: false });
@@ -76,7 +76,6 @@ const SignInForm = ({ setOpen }) => {
         email: watch("email"),
         password: watch("password"),
       });
-
       if (result.ok) {
         setOpen(false);
         router.refresh();
@@ -113,7 +112,9 @@ const SignInForm = ({ setOpen }) => {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-xs gap-4">
+    <div
+      className={cn("mx-auto flex w-full max-w-xs flex-col gap-4", className)}
+    >
       {/* Form  */}
       {/* {status === "authenticated" ? (
         <div>
@@ -142,7 +143,7 @@ const SignInForm = ({ setOpen }) => {
               type="email"
               name="email"
               placeholder="ex: john@example.com"
-              className="placeholder:text-neutral-300 border-neutral-400"
+              className="border-neutral-400 placeholder:text-neutral-300"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -162,7 +163,7 @@ const SignInForm = ({ setOpen }) => {
               type="password"
               name="password"
               placeholder="*******"
-              className="placeholder:text-neutral-300 border-neutral-400"
+              className="border-neutral-400 placeholder:text-neutral-300"
               {...register("password", {
                 required: "Password is required",
                 minLength: {
@@ -180,7 +181,7 @@ const SignInForm = ({ setOpen }) => {
               <div
                 className={cn(
                   "text-red-500",
-                  responseObj.ok && "text-blue-500"
+                  responseObj.ok && "text-blue-500",
                 )}
               >
                 {responseObj.message}
@@ -213,7 +214,7 @@ const SignInForm = ({ setOpen }) => {
             {loading ? (
               <div className="flex items-center gap-2">
                 <span>Loading</span>
-                <Icons.spinner className="w-4 h-4 animate-spin" />
+                <Icons.spinner className="h-4 w-4 animate-spin" />
               </div>
             ) : (
               <div className="flex items-center gap-2">
@@ -221,28 +222,28 @@ const SignInForm = ({ setOpen }) => {
               </div>
             )}
           </Button>
+          {/* End Form */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background text-muted-foreground bg-white px-2 dark:bg-neutral-900">
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <Button variant="outline">
+              <Icons.gitHub className="mr-2 h-4 w-4" />
+              Github
+            </Button>
+            <Button variant="outline" onClick={handleGoogleClick}>
+              <Icons.google className="mr-2 h-4 w-4" />
+              Google
+            </Button>
+          </div>
         </form>
-        {/* End Form */}
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="px-2 bg-white bg-background text-muted-foreground dark:bg-neutral-900">
-              Or continue with
-            </span>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-6">
-          <Button variant="outline">
-            <Icons.gitHub className="w-4 h-4 mr-2" />
-            Github
-          </Button>
-          <Button variant="outline" onClick={handleGoogleClick}>
-            <Icons.google className="w-4 h-4 mr-2" />
-            Google
-          </Button>
-        </div>
       </div>
       {/* )} */}
     </div>

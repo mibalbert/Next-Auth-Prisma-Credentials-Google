@@ -6,8 +6,12 @@
 const navigationConfig = {
   guestTopNav: [
     {
+      title: "Landing Page",
+      href: "/",
+    },
+    {
       title: "Page (unprotected)",
-      href: "/auth/sign-in",
+      href: "/some-page",
     },
     {
       title: "Dashboard (protected)",
@@ -20,17 +24,21 @@ const navigationConfig = {
   ],
   userTopNav: [
     {
+      title: "Landing Page",
+      href: "/",
+    },
+    {
       title: "Dashboard (protected)",
       href: "/user/dashboard",
     },
     {
       title: "Page (unprotected)",
-      href: "/auth/sign-in",
+      href: "/some-page",
     },
   ],
   userSideNav: [
     {
-      title: "Example",
+      title: "Pages",
       data: [
         {
           title: "Landing Page",
@@ -43,15 +51,23 @@ const navigationConfig = {
       ],
     },
     {
-      title: "Example",
+      title: "Documentation",
       data: [
         {
-          title: "Example - One",
-          href: "/user/example-one",
+          title: "Overview",
+          href: "/user/overview",
         },
         {
-          title: "Example - Two",
-          href: "/user/example-two",
+          title: "Database",
+          href: "/user/database",
+        },
+        {
+          title: "Web Session",
+          href: "/user/web-session",
+        },
+        {
+          title: "DB Session",
+          href: "/user/db-session",
         },
       ],
     },

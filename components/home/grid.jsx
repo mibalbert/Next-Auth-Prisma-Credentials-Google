@@ -5,7 +5,7 @@
 const Grid = () => {
   return (
     <svg
-      className="absolute inset-0  top-20 -z-10 h-1/2 w-full stroke-black/5 [mask-image:radial-gradient(100%_100%_at_center,white,transparent)] dark:stroke-white/10"
+      className="absolute inset-0  top-20 -z-10 h-2/3 w-full stroke-black/5 [mask-image:radial-gradient(100%_100%_at_center,white,transparent)] dark:stroke-white/10"
       aria-hidden="true"
     >
       <defs>

@@ -2,6 +2,7 @@
  * page.jsx
  */
 
+import Footer from "@/components/footer/footer";
 import CardGroup from "@/components/home/card-group";
 import Grid from "@/components/home/grid";
 import Title from "@/components/home/title";
@@ -12,6 +13,7 @@ export default async function Home() {
       <Grid />
       <Title />
       <CardGroup />
+      <Footer />
     </main>
   );
 }
