@@ -12,7 +12,7 @@ import { getNavigationConfig } from "@/configuration/navigation";
 
 const SideNav = ({ className, session }) => {
   const pathname = usePathname();
-  const { sideNav } = getNavigationConfig(session?.user?.role);
+  const { sideNav } = getNavigationConfig(session?.user?.role ?? "GUEST");
 
   return (
     <section className={cn(" h-full  w-full ", className)}>

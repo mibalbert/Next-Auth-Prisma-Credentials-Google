@@ -12,11 +12,12 @@ export default withAuth(
       req.nextauth.token?.role !== "USER"
     ) {
       return NextResponse.redirect(
-        // new URL("/auth/signIn?message=You_Are_Not_Authorized!&message2=Sign_In_with_the_proper_credentials_to_gain_access", req.url)
+        //Use this type of url if you want to extract the error message and display it
+        // new URL("/auth/signIn?error=You_Are_Not_Authorized!&message2=Sign_In_with_the_proper_credentials_to_gain_access", req.url)
         new URL("/", req.url),
       );
     }
-    return null; // Return null if none of the conditions are met
+    return null;
   },
   {
     callbacks: {

@@ -7,9 +7,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 const NavItems = ({ session, pathname }) => {
-  const { topNav } = session
-    ? getNavigationConfig(session?.user?.role)
-    : getNavigationConfig("GUEST");
+  const { topNav } = getNavigationConfig(session?.user?.role ?? "GUEST");
 
   return (
     <nav className="m-0 mr-2 flex  h-[100%] w-full items-center gap-5  p-0">
@@ -18,7 +16,7 @@ const NavItems = ({ session, pathname }) => {
           <Link
             key={idx}
             href={el.href}
-            className="relative flex h-full w-full items-center justify-center whitespace-nowrap rounded-md px-2 text-sm hover:bg-gray-100 hover:text-black dark:hover:bg-gray-700 dark:hover:text-white"
+            className="relative flex items-center justify-center w-full h-full px-2 text-sm rounded-md whitespace-nowrap hover:bg-gray-100 hover:text-black dark:hover:bg-gray-700 dark:hover:text-white"
           >
             <div
               className={cn("absolute", {

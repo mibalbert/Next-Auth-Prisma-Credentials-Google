@@ -65,9 +65,7 @@ export const authOptions = {
             throw new Error("Email not registered!");
           }
           if (user && user?.account?.provider === "google") {
-            throw new Error(
-              "Email used to sign-in with Google, use that instead",
-            );
+            throw new Error("Email used to sign-in with Google, use that instead");
           }
           if (!(await bcrypt.compare(credentials.password, user.password))) {
             throw new Error("Invalid credentials");
@@ -175,19 +173,20 @@ export const authOptions = {
       return session;
     },
   },
-  events: {
-    signOut: async ({ token }) => {
-      if (token?.sessionToken) {
-        const deleteSession = await prisma.Session.delete({
-          where: {
-            id: token?.sessionId,
-            sessionToken: token?.sessionToken,
-          },
-        });
-        if (!deleteSession) {
-          throw new Error("Could not delete Session!");
-        }
-      }
-    },
-  },
+  //Uncomment if you want not to store the sessions in the db. Bassically this delets the current session of the logged-in user.
+  // events: {
+  //   signOut: async ({ token }) => {
+  //     if (token?.sessionToken) {
+  //       const deleteSession = await prisma.Session.delete({
+  //         where: {
+  //           id: token?.sessionId,
+  //           sessionToken: token?.sessionToken,
+  //         },
+  //       });
+  //       if (!deleteSession) {
+  //         throw new Error("Could not delete Session!");
+  //       }
+  //     }
+  //   },
+  // },
 };

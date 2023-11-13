@@ -6,31 +6,32 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+
+const COUNTDOWN = 6;
 
 const SendEmailActivate = ({
   email,
   loading,
+  className,
   otherLoading,
   setOtherLoading,
   setResponseObj,
 }) => {
   const [emailSent, setEmailSent] = useState(false);
-  const [countdown, setCountdown] = useState(6);
+  const [countdown, setCountdown] = useState(COUNTDOWN);
 
   const handleResendVerificationLink = async () => {
-    setResponseObj({ message: "", ok: false });
+    // setResponseObj({ message: "", ok: false });
     setOtherLoading(true);
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/auth/send-activate-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
+      const response = await fetch("/api/auth/send-activate-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ email }),
+      });
       const res = await response.json();
       if (res.ok) {
         setEmailSent(true);
@@ -51,7 +52,7 @@ const SendEmailActivate = ({
       }, 1000);
     } else {
       setEmailSent(false);
-      setCountdown(60);
+      setCountdown(COUNTDOWN);
     }
     return () => {
       clearInterval(interval);
@@ -59,7 +60,7 @@ const SendEmailActivate = ({
   }, [countdown, emailSent]);
 
   return (
-    <div className="w-full">
+    <div className={cn("w-full", className)}>
       <Button
         type="submit"
         className="w-full"

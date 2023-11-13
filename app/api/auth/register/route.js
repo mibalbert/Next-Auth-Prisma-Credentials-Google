@@ -38,7 +38,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           message: "Email already used, try using a diffrent email!",
-          success: false,
+          ok: false,
         },
         { status: 200 },
       );
@@ -107,7 +107,7 @@ export async function POST(request) {
             reject(
               NextResponse.json({
                 message: "Error occurred: " + error.message,
-                success: false,
+                ok: false,
                 status: 500,
               }),
             );
@@ -117,7 +117,7 @@ export async function POST(request) {
               NextResponse.json({
                 message:
                   "Verification Email sent successfully. Check out your inbox!",
-                success: true,
+                ok: true,
                 status: 200,
               }),
             );
@@ -127,14 +127,14 @@ export async function POST(request) {
     } else {
       console.error("Account creation failed");
       return NextResponse.json(
-        { error: "Internal Server Error", success: false },
+        { message: "Internal Server Error", ok: false },
         { status: 500 },
       );
     }
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Internal Server Error", success: false },
+      { message: "Internal Server Error", ok: false },
       { status: 500 },
     );
   }

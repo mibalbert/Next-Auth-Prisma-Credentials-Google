@@ -21,27 +21,17 @@ const Title = async () => {
         eaque.
       </div>
       <div className="flex w-full justify-center">
-        {session?.user?.name ? (
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2">
-              <span>Hi, {session?.user?.name}</span>
-            </div>
-            <div className="flex gap-2">
-              <div>Logged in with email:</div>
-              <div>{session?.user?.email}</div>
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex gap-2">
+            <div>
+              Hi, {session?.user?.name || <span>( Sign-In first )</span>}
             </div>
           </div>
-        ) : (
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2">
-              <span>Hi, ...</span>
-            </div>
-            <div className="flex gap-2">
-              <div>Logged in with email:</div>
-              <div>...</div>
-            </div>
+          <div className="flex gap-2">
+            <div>Logged in with email:</div>
+            <div>{session?.user?.email || <span>( Sign-In first )</span>}</div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

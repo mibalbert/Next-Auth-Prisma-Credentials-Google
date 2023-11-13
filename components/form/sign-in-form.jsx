@@ -23,33 +23,9 @@ import SendPasswordReset from "./send-reset-password";
 import SendEmailActivate from "./send-email-activate";
 
 const SignInForm = ({ setOpen, className }) => {
-  const { data: session, status } = useSession();
-
-  const [responseObj, setResponseObj] = useState({ message: "", ok: false });
   const [loading, setLoading] = useState(false);
-  const [showSendEmail, setShowSendEmail] = useState(false);
-  const [showChangePassword, setShowChangePassword] = useState(false);
   const [otherLoading, setOtherLoading] = useState(false);
-
-  const router = useRouter();
-  const pathName = usePathname();
-  const searchParams = useSearchParams();
-  const paramsError = searchParams.get("error");
-  // if (paramsError) {
-  //   setResponseObj({ message: paramsError, ok: false });
-  // }
-
-  if (session?.user?.email && pathName.startsWith("/auth/sign-in")) {
-    redirect("/");
-  }
-
-  useEffect(() => {
-    if (paramsError) {
-      console.log("paramsError");
-      setResponseObj({ message: paramsError, ok: false });
-      console.log(responseObj);
-    }
-  }, [paramsError, responseObj]);
+  const [responseObj, setResponseObj] = useState({ message: "", ok: false });
   const {
     watch,
     register,
@@ -57,52 +33,59 @@ const SignInForm = ({ setOpen, className }) => {
     formState: { errors },
   } = useForm();
 
+  const router = useRouter();
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const paramsError = searchParams.get("error");
+
   const email = watch("email");
   const password = watch("password");
 
   useEffect(() => {
-    // setResponseObj({ message: "", ok: false });
-    setShowSendEmail(false);
-    setShowChangePassword(false);
-  }, [email, password]);
+    if (paramsError) {
+      setResponseObj({ message: paramsError, ok: false });
+    }
+    setResponseObj({ message: "", ok: false });
+  }, [email, password, paramsError]);
 
   const handleSubmitForm = async () => {
     setLoading(true);
 
-    let result;
-    if (!pathName.startsWith("/auth/sign-in")) {
-      result = await signIn("credentials", {
-        redirect: false,
-        email: watch("email"),
-        password: watch("password"),
-      });
-      if (result.ok) {
-        setOpen(false);
-        router.refresh();
-      }
-    } else {
-      result = await signIn("credentials", {
-        redirect: true,
-        callbackUrl: "/",
-        email: watch("email"),
-        password: watch("password"),
-      });
-      if (result.ok) {
-        router.refresh();
-      }
-    }
+    let res;
 
-    if (result.error) {
-      if (result.error === "Invalid credentials") {
-        setShowSendEmail(false);
-        setShowChangePassword(true);
-      } else if (result.error === "Email is not verified") {
-        setShowChangePassword(false);
-        setShowSendEmail(true);
+    try {
+      const signInOptions = {
+        email: watch("email"),
+        password: watch("password"),
+      };
+
+      if (!pathName.startsWith("/auth/sign-in")) {
+        signInOptions.redirect = false;
+        res = await signIn("credentials", signInOptions);
+
+        if (res.ok) {
+          setOpen(false);
+          router.refresh();
+        }
+      } else {
+        signInOptions.redirect = true;
+        signInOptions.callbackUrl = "/";
+        res = await signIn("credentials", signInOptions);
+
+        if (res.ok) {
+          router.refresh();
+        }
       }
-      setResponseObj({ message: result.error, ok: false });
+
+      if (!res.ok) {
+        setResponseObj({ message: res.error });
+      }
+    } catch (error) {
+      console.error("An error occurred during form submission:", error);
+      // Handle error as needed
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleGoogleClick = async () => {
@@ -115,28 +98,12 @@ const SignInForm = ({ setOpen, className }) => {
     <div
       className={cn("mx-auto flex w-full max-w-xs flex-col gap-4", className)}
     >
-      {/* Form  */}
-      {/* {status === "authenticated" ? (
-        <div>
-          <div>User Aleardy logged-in, as {session?.user?.name}</div>
-          <div>
-            In order to sign-in to a diffrent account, you must log out first!
-          </div>
-          <Button
-            onClick={() => {
-              signOut({ callbackUrl: "/auth/sign-in" });
-            }}
-          >
-            Sign-Out
-          </Button>
-        </div>
-      ) : ( */}
-      <div>
-        <form
-          onSubmit={handleSubmit(handleSubmitForm)}
-          className="flex flex-col gap-5"
-        >
-          <div className="grid gap-2">
+      <form
+        onSubmit={handleSubmit(handleSubmitForm)}
+        className="flex flex-col gap-3"
+      >
+        <div className="flex flex-col gap-5">
+          <div className="grid gap-3">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -156,7 +123,7 @@ const SignInForm = ({ setOpen, className }) => {
           {errors.email && (
             <span className="text-red-500">{errors.email.message}</span>
           )}
-          <div className="grid gap-2">
+          <div className="grid gap-3">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
@@ -173,79 +140,75 @@ const SignInForm = ({ setOpen, className }) => {
               })}
             />
           </div>
-          <div>
-            {errors.password && (
-              <span className="text-red-500">{errors.password.message}</span>
-            )}
-            {responseObj.message && (
-              <div
-                className={cn(
-                  "text-red-500",
-                  responseObj.ok && "text-blue-500",
-                )}
-              >
-                {responseObj.message}
-              </div>
-            )}
+        </div>
+        <div>
+          {errors.password && (
+            <span className="text-red-500">{errors.password.message}</span>
+          )}
+          {responseObj.message && (
+            <div
+              className={cn("text-red-500", responseObj.ok && "text-blue-500")}
+            >
+              {responseObj.message}
+            </div>
+          )}
+        </div>
+        {responseObj.message === "Error: Email is not verified" && (
+          <SendEmailActivate
+            email={email}
+            loading={loading}
+            otherLoading={otherLoading}
+            setOtherLoading={setOtherLoading}
+            setResponseObj={setResponseObj}
+          />
+        )}
+        {responseObj.message === "Error: Invalid credentials" && (
+          <SendPasswordReset
+            email={email}
+            loading={loading}
+            otherLoading={otherLoading}
+            setOtherLoading={setOtherLoading}
+            setResponseObj={setResponseObj}
+          />
+        )}
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={loading || otherLoading}
+        >
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <span>Loading</span>
+              <Icons.spinner className="h-4 w-4 animate-spin" />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span>Sign In </span>
+            </div>
+          )}
+        </Button>
+        {/* End Form */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
           </div>
-          {showSendEmail && (
-            <SendEmailActivate
-              email={email}
-              loading={loading}
-              otherLoading={otherLoading}
-              setOtherLoading={setOtherLoading}
-              setResponseObj={setResponseObj}
-            />
-          )}
-          {showChangePassword && (
-            <SendPasswordReset
-              email={email}
-              loading={loading}
-              otherLoading={otherLoading}
-              setOtherLoading={setOtherLoading}
-              setResponseObj={setResponseObj}
-            />
-          )}
-          <Button
-            className="w-full"
-            type="submit"
-            disabled={loading || otherLoading}
-          >
-            {loading ? (
-              <div className="flex items-center gap-2">
-                <span>Loading</span>
-                <Icons.spinner className="h-4 w-4 animate-spin" />
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <span>Sign In </span>
-              </div>
-            )}
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background text-muted-foreground bg-white px-2 dark:bg-neutral-900">
+              Or continue with
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-6">
+          <Button variant="outline">
+            <Icons.gitHub className="mr-2 h-4 w-4" />
+            Github
           </Button>
-          {/* End Form */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background text-muted-foreground bg-white px-2 dark:bg-neutral-900">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-6">
-            <Button variant="outline">
-              <Icons.gitHub className="mr-2 h-4 w-4" />
-              Github
-            </Button>
-            <Button variant="outline" onClick={handleGoogleClick}>
-              <Icons.google className="mr-2 h-4 w-4" />
-              Google
-            </Button>
-          </div>
-        </form>
-      </div>
-      {/* )} */}
+          <Button variant="outline" onClick={handleGoogleClick}>
+            <Icons.google className="mr-2 h-4 w-4" />
+            Google
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

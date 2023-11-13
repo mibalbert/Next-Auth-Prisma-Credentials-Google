@@ -2,16 +2,17 @@
  * navigation.js
  */
 
-// Define navigation configurations
+// Define navigation configurations (top nav links and side nav links)
 const navigationConfig = {
+  ////Guest
   guestTopNav: [
     {
-      title: "Landing Page",
+      title: "Home",
       href: "/",
     },
     {
-      title: "Page (unprotected)",
-      href: "/some-page",
+      title: "Docs",
+      href: "/docs/overview",
     },
     {
       title: "Dashboard (protected)",
@@ -22,18 +23,59 @@ const navigationConfig = {
       href: "/auth/sign-in",
     },
   ],
+  guestSideNav: [
+    {
+      title: "Pages",
+      data: [
+        {
+          title: "Home (Landing Page)",
+          href: "/",
+        },
+        {
+          title: "Dashboard (protected)",
+          href: "/user/dashboard",
+        },
+        {
+          title: "Sign-In",
+          href: "/auth/sign-in",
+        },
+        {
+          title: "Register",
+          href: "/auth/register",
+        },
+      ],
+    },
+    {
+      title: "Documentation",
+      data: [
+        {
+          title: "Overview",
+          href: "/docs/overview",
+        },
+        {
+          title: "Database",
+          href: "/docs/database",
+        },
+        {
+          title: "Web Session",
+          href: "/docs/web-session",
+        },
+        {
+          title: "DB Session",
+          href: "/docs/db-session",
+        },
+      ],
+    },
+  ],
+  ////User
   userTopNav: [
     {
-      title: "Landing Page",
+      title: "Home",
       href: "/",
     },
     {
       title: "Dashboard (protected)",
       href: "/user/dashboard",
-    },
-    {
-      title: "Page (unprotected)",
-      href: "/some-page",
     },
   ],
   userSideNav: [
@@ -41,7 +83,7 @@ const navigationConfig = {
       title: "Pages",
       data: [
         {
-          title: "Landing Page",
+          title: "Home (Landing Page)",
           href: "/",
         },
         {
@@ -86,6 +128,7 @@ export function getNavigationConfig(userRole) {
     default:
       return {
         topNav: navigationConfig.guestTopNav,
+        sideNav: navigationConfig.guestSideNav,
       };
     //You can also add something like ADMIN
   }

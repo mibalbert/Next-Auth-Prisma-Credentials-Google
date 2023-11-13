@@ -9,17 +9,26 @@ import Card from "@/components/home/card";
 const CardGroup = async () => {
   const webSession = await getServerSession(authOptions);
 
-  const response = await fetch(
-    "http://localhost:3000/api/user/get-db-session",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  console.log(webSession);
+
+  let dbSession;
+
+  if (webSession) {
+    const response = await fetch(
+      `${process.env.BASE_URL}/api/user/get-db-session`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: webSession?.user?.id }),
+        cache: "no-store", // Moved cache property here
       },
-      body: JSON.stringify({ id: webSession?.user?.id }),
-    },
-  );
-  const dbSession = await response.json();
+    );
+    dbSession = await response.json();
+  } else {
+    dbSession = [];
+  }
 
   return (
     <div className="mx-auto grid w-[90%] max-w-screen-xl grid-cols-1 gap-10 lg:w-full lg:grid-cols-2">
@@ -38,7 +47,7 @@ const CardGroup = async () => {
         description={
           "This is the JSON data stored in the db about the account of the logged-in user."
         }
-        data={dbSession.data}
+        data={dbSession?.data || null}
         href={"/user/db-session"}
       />
     </div>

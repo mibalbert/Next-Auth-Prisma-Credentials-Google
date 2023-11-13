@@ -6,24 +6,21 @@
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
-import { signIn } from "next-auth/react";
-
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { FaArrowLeft } from "react-icons/fa6";
 import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FaArrowLeft } from "react-icons/fa6";
-
+import SendEmailActivate from "@/components/form/send-email-activate";
 import { registerNewUser } from "@/app/actions/actions";
-
-import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(null);
-
+  const [otherLoading, setOtherLoading] = useState(false);
+  const [responseObj, setResponseObj] = useState({ message: null, ok: false });
   const {
     watch,
     register,
@@ -36,24 +33,16 @@ const Register = () => {
   let lastName = watch("lastName");
   let password = watch("password");
   let confirmPassword = watch("confirmPassword");
+
   useEffect(() => {
-    setError("");
+    setResponseObj({ message: null, ok: false });
   }, [email, firstName, lastName, confirmPassword, password]);
 
   const registerUser = async (data) => {
     setLoading(true);
-    const result = await registerNewUser(data);
-
+    const res = await registerNewUser(data);
+    setResponseObj({ message: res.message, ok: res.ok });
     setLoading(false);
-
-    console.log("reusllttt", result);
-
-    if (!result.success) {
-      setError(result.message);
-    }
-    if (result.success) {
-      setSuccess(result.message);
-    }
   };
 
   return (
@@ -70,7 +59,39 @@ const Register = () => {
       </Link>
       <section className="grid h-full min-h-screen w-full grid-cols-12 items-center">
         <div className="col-span-9">
-          {!success ? (
+          {responseObj.ok ? (
+            <div className="mx-auto w-full max-w-md space-y-2">
+              <div className="mx-auto flex w-full items-center gap-2">
+                <Icons.success
+                  className="h-4 w-4 text-green-500"
+                  strokeWidth={3}
+                />
+                <div>{responseObj.message}</div>
+              </div>
+              <div className="flex w-full items-center justify-center gap-2 ">
+                <SendEmailActivate
+                  email={email}
+                  loading={loading}
+                  responseObj={responseObj}
+                  otherLoading={otherLoading}
+                  setResponseObj={setResponseObj}
+                  setOtherLoading={setOtherLoading}
+                  className="mx-auto flex w-full "
+                />
+              </div>
+              <div className="flex w-full items-center justify-center">
+                <Link
+                  href={"/auth/sign-in"}
+                  disabled={otherLoading}
+                  className={cn(
+                    "w-full  max-w-xs rounded-md bg-black py-1.5 text-center font-semibold text-white disabled:opacity-80 dark:bg-white dark:text-black",
+                  )}
+                >
+                  Sign In
+                </Link>
+              </div>
+            </div>
+          ) : (
             <form
               onSubmit={handleSubmit(registerUser)}
               className="mx-auto flex w-full max-w-md flex-col gap-4 rounded-xl p-10"
@@ -176,16 +197,15 @@ const Register = () => {
                   {errors.confirmPassword.message}
                 </div>
               )}
-              {error && (
+              {responseObj.message && (
                 <div className="flex items-center gap-1">
                   <Icons.failed
                     className="h-5 w-5 text-red-500"
                     strokeWidth={2.5}
                   />
-                  <div className="text-red-500">{error}</div>
+                  <div className="text-red-500">{responseObj.message}</div>
                 </div>
               )}
-
               <Button className="w-full" type="submit" disabled={loading}>
                 {!loading ? (
                   "Register"
@@ -218,21 +238,6 @@ const Register = () => {
                 </Button>
               </div>
             </form>
-          ) : (
-            <div className="mx-auto w-full max-w-md space-y-3">
-              <div className="flex items-center gap-2">
-                <Icons.success
-                  className="h-4 w-4 text-green-500"
-                  strokeWidth={3}
-                />
-                <div>{success}</div>
-              </div>
-              <div className="flex w-full items-center justify-center">
-                <Link href={"/auth/sign-in"} className="underline ">
-                  Sign In
-                </Link>
-              </div>
-            </div>
           )}
         </div>
         <div className="col-span-3 h-full w-full bg-neutral-300">
