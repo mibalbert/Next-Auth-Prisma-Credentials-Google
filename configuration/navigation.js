@@ -7,12 +7,12 @@ const navigationConfig = {
   ////Guest
   guestTopNav: [
     {
-      title: "Home",
-      href: "/",
-    },
-    {
       title: "Docs",
       href: "/docs/overview",
+    },
+    {
+      title: "Home",
+      href: "/",
     },
     {
       title: "Dashboard (protected)",
@@ -25,33 +25,25 @@ const navigationConfig = {
   ],
   guestSideNav: [
     {
-      title: "Pages",
+      title: "Overview & Pages",
       data: [
         {
-          title: "Home (Landing Page)",
-          href: "/",
-        },
-        {
-          title: "Dashboard (protected)",
-          href: "/user/dashboard",
+          title: "Overview",
+          href: "/docs/overview",
         },
         {
           title: "Sign-In",
-          href: "/auth/sign-in",
+          href: "/docs/sign-in",
         },
         {
           title: "Register",
-          href: "/auth/register",
+          href: "/docs/register",
         },
       ],
     },
     {
       title: "Documentation",
       data: [
-        {
-          title: "Overview",
-          href: "/docs/overview",
-        },
         {
           title: "Database",
           href: "/docs/database",
@@ -74,8 +66,12 @@ const navigationConfig = {
       href: "/",
     },
     {
-      title: "Dashboard (protected)",
+      title: "Dashboard",
       href: "/user/dashboard",
+    },
+    {
+      title: "Docs",
+      href: "/docs/overview",
     },
   ],
   userSideNav: [
@@ -86,32 +82,16 @@ const navigationConfig = {
           title: "Home (Landing Page)",
           href: "/",
         },
+      ],
+    },
+    {
+      title: "User Pages",
+      data: [
         {
           title: "Dashboard",
           href: "/user/dashboard",
         },
-      ],
-    },
-    {
-      title: "Documentation",
-      data: [
-        {
-          title: "Overview",
-          href: "/user/overview",
-        },
-        {
-          title: "Database",
-          href: "/user/database",
-        },
-        {
-          title: "Web Session",
-          href: "/user/web-session",
-        },
-        {
-          title: "DB Session",
-          href: "/user/db-session",
-        },
-      ],
+      ]
     },
   ],
 };

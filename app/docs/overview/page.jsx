@@ -1,9 +1,13 @@
 /**
- * user/overview/page.jsx
+ * overview/page.jsx
  */
 
-const Overview = () => {
-  return <div>Overview</div>;
+const Overview = async () => {
+  return (
+    <div>
+      <div>Overview</div>
+    </div>
+  );
 };
 
 export default Overview;

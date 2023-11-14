@@ -11,42 +11,51 @@ const ExpendableCard = ({ data, className }) => {
   const handleToggleExpand = () => {
     setExpanded(!isExpanded);
   };
-
   return (
-    <div className="h-full rounded-lg lg:max-w-3xl">
-      <div className={cn(" overflow-hidden text-sm leading-6 ")}>
+    <div className={`h-full  lg:max-w-3xl ${className}`}>
+      <div className={cn("overflow-hidden text-sm leading-6")}>
         <div className="max-h-[50vh] overflow-y-auto">
-          {!isExpanded ? (
-            <div>
-              <pre className="bg-gray-950 px-10 py-5">
-                <div>Current Session</div>
-                <code>{JSON.stringify(data[0], null, 2)}</code>
+          {!data ? (
+            <div className="">
+              <pre className="overflow-auto rounded-lg bg-gray-950 p-10 lg:max-w-3xl">
+                <code>Log in first to see the current session</code>
               </pre>
             </div>
           ) : (
             <div>
-              <pre className="bg-gray-950 px-10 py-5">
-                <div>All your stored Sessions</div>
-                <code>{JSON.stringify(data, null, 2)}</code>
-              </pre>
+              {!isExpanded ? (
+                <div>
+                  <pre className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-gray-950 overflow-auto rounded-lg bg-gray-950 lg:max-w-3xl">
+                    <div>Current Session</div>
+                    <code>{data ? JSON.stringify(data[0]) : null}</code>
+                  </pre>
+                </div>
+              ) : (
+                <div>
+                  <pre className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-gray-950 overflow-auto rounded-lg bg-gray-950 lg:max-w-3xl">
+                    <div>All your stored Sessions</div>
+                    <code>{data ? JSON.stringify(data) : "Sign-In first"}</code>
+                  </pre>
+                  <br />
+                  <div>
+                    {data?.length > 1 && (
+                      <div>
+                        And {data.length > 1 ? data.length - 1 : data.length}{" "}
+                        more Sessions stored
+                      </div>
+                    )}
+                    {/* Add a button to toggle expansion */}
+                    <button
+                      onClick={handleToggleExpand}
+                      className="cursor-pointer text-blue-500"
+                    >
+                      {isExpanded ? "Collapse" : "Expand"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
-        <br />
-        <div>
-          {data.length > 1 && (
-            <div>
-              And {data.length > 1 ? data.length - 1 : data.length} more
-              Sessions stored
-            </div>
-          )}
-          {/* Add a button to toggle expansion */}
-          <button
-            onClick={handleToggleExpand}
-            className="cursor-pointer text-blue-500"
-          >
-            {isExpanded ? "Collapse" : "Expand"}
-          </button>
         </div>
       </div>
     </div>

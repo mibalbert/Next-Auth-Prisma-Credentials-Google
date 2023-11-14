@@ -1,18 +1,7 @@
-/**
- * user/home/page.jsx
- */
+import React from "react";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import { getServerSession } from "next-auth/next";
-
-const Home = async () => {
-  const session = await getServerSession(authOptions);
-
-  return (
-    <div>
-      <div>User Home Page</div>
-    </div>
-  );
+const Dashboard = () => {
+  return <div>Dashboard</div>;
 };
 
-export default Home;
+export default Dashboard;

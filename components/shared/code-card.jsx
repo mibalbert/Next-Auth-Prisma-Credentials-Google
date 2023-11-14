@@ -1,20 +1,17 @@
 /**
  * code-card.jsx
  */
-"use client";
 
 import { cn } from "@/lib/utils";
 
-const CodeCard = ({ tag, title, description, data, className }) => {
+const CodeCard = ({ data, className }) => {
   return (
     <pre
       className={cn(
-        "overflow-auto rounded-lg bg-gray-950 px-2 pb-10 pt-3 lg:max-w-3xl",
+        "scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin  scrollbar-thumb-gray-800 scrollbar-track-gray-950 overflow-auto rounded-lg border-gray-950 bg-gray-950 p-10  lg:max-w-3xl",
         className,
       )}
     >
-      {/* <div>Current Session</div> */}
-      {/* <code>{JSON.stringify(data, null, 2)}</code> */}
       <code>{data}</code>
     </pre>
   );
