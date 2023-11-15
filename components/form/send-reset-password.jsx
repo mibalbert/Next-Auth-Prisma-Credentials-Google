@@ -22,7 +22,7 @@ const SendPasswordReset = ({
     setOtherLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/send-reset-password-email",
+        `${process.env.BASE_URL}/api/auth/send-reset-password-email`,
         {
           method: "POST",
           headers: {
