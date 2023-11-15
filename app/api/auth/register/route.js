@@ -98,7 +98,7 @@ export async function POST(request) {
         from: `Email Activation Token <${process.env.NODEMAILER_ADMIN_EMAIL}>`,
         to: `${email}`,
         subject: "Activate your Email now to enjoy all the benefits of ....",
-        text: `That was easy! http://localhost:3000/auth/activate/${token.token}`,
+        text: `That was easy! ${process.env.BASE_URL}/auth/activate/${token.token}`,
       };
       return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, function (error, info) {

@@ -15,7 +15,7 @@ export async function loginUser(prevState, formData) {
 
 export async function registerNewUser(formData) {
   try {
-    const res = await fetch(`${BASE_URL}/api/auth/register`, {
+    const res = await fetch(`${process.env.BASE_URL}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
