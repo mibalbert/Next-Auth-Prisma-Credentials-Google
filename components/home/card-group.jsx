@@ -39,7 +39,7 @@ const CardGroup = async () => {
           "This is the JSON data stored in the db about the account of the logged-in user."
         }
         data={webSession}
-        href={"/user/web-session"}
+        href={"/docs/web-session"}
       />
       <Card
         tag={"Session (SQL)"}
@@ -48,7 +48,7 @@ const CardGroup = async () => {
           "This is the JSON data stored in the db about the account of the logged-in user."
         }
         data={dbSession?.data || null}
-        href={"/user/db-session"}
+        href={"/docs/db-session"}
       />
     </div>
   );

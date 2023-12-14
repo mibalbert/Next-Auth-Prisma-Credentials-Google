@@ -23,7 +23,7 @@ const MainNav = ({ session }) => {
 
   return (
     <section className="dark:supports-backdrop-blur:bg-black/30 supports-backdrop-blur:bg-white/30 sticky top-0 z-50 m-0 flex h-14 items-center border-b border-gray-200 p-0 shadow-gray-300 backdrop-blur-md dark:border-gray-800 dark:shadow-none lg:w-full">
-      <div className="mx-auto flex w-[90%] max-w-7xl justify-between  lg:w-full">
+      <div className="m-0 mx-auto flex h-full w-[90%] max-w-7xl justify-between p-0 lg:w-full">
         <div className="flex items-center">
           <Link href="/" className="text-lg font-bold ">
             Logo

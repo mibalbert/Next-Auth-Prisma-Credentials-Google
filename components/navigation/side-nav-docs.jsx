@@ -8,11 +8,44 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-import { getNavigationConfig } from "@/configuration/navigation";
+const sideNav = [
+  {
+    title: "Docs",
+    data: [
+      {
+        title: "Overview",
+        href: "/docs/overview",
+      },
+      {
+        title: "Database",
+        href: "/docs/database",
+      },
+      {
+        title: "DB Session",
+        href: "/docs/db-session",
+      },
+      {
+        title: "Web Session",
+        href: "/docs/web-session",
+      },
+      {
+        title: "Sign-In",
+        href: "/docs/sign-in",
+      },
+      {
+        title: "Register",
+        href: "/docs/register",
+      },
+      {
+        title: "Email",
+        href: "/docs/email-verification",
+      },
+    ],
+  },
+];
 
-const SideNav = ({ className, session }) => {
+const SideNavDocs = ({ className, session }) => {
   const pathname = usePathname();
-  const { sideNav } = getNavigationConfig(session?.user?.role ?? "USER");
 
   return (
     <section className={cn(" h-full  w-full ", className)}>
@@ -56,4 +89,4 @@ const SideNav = ({ className, session }) => {
   );
 };
 
-export default SideNav;
+export default SideNavDocs;

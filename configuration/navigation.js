@@ -7,15 +7,15 @@ const navigationConfig = {
   ////Guest
   guestTopNav: [
     {
-      title: "Docs",
-      href: "/docs/overview",
-    },
-    {
       title: "Home",
       href: "/",
     },
     {
-      title: "Dashboard (protected)",
+      title: "Docs",
+      href: "/docs/overview",
+    },
+    {
+      title: "Dashboard",
       href: "/user/dashboard",
     },
     {
@@ -24,40 +24,6 @@ const navigationConfig = {
     },
   ],
   guestSideNav: [
-    {
-      title: "Overview & Pages",
-      data: [
-        {
-          title: "Overview",
-          href: "/docs/overview",
-        },
-        {
-          title: "Sign-In",
-          href: "/docs/sign-in",
-        },
-        {
-          title: "Register",
-          href: "/docs/register",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      data: [
-        {
-          title: "Database",
-          href: "/docs/database",
-        },
-        {
-          title: "Web Session",
-          href: "/docs/web-session",
-        },
-        {
-          title: "DB Session",
-          href: "/docs/db-session",
-        },
-      ],
-    },
   ],
   ////User
   userTopNav: [

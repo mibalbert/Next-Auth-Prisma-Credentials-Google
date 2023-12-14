@@ -25,7 +25,7 @@ const SignIn = async () => {
         </span>
       </Link>
       <section className="grid h-full min-h-screen w-full grid-cols-12 items-center">
-        <div className="col-span-9 flex w-full flex-col items-center justify-center gap-5">
+        <div className="col-span-8 flex w-full flex-col items-center justify-center gap-5">
           {session?.user?.email ? (
             <SignOutButton />
           ) : (
@@ -35,7 +35,7 @@ const SignIn = async () => {
             </div>
           )}
         </div>
-        <div className="col-span-3 h-full w-full bg-neutral-300">
+        <div className="col-span-4 h-full w-full bg-neutral-300">
           ASdasdasdas
         </div>
       </section>

@@ -25,6 +25,7 @@ function generateAccessToken(userId) {
 
 export async function POST(request) {
   try {
+    const envVar = process.env.EMAIL_VERIFICATION
     const data = await request.json();
     const { email, firstName, lastName, password } = data;
 
@@ -78,52 +79,58 @@ export async function POST(request) {
     }
 
     if (account) {
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.NODEMAILER_ADMIN_EMAIL,
-          pass: process.env.NODEMAILER_ADMIN_PASS,
-        },
-      });
-      const token = await prisma.activateToken.create({
-        data: {
-          userId: newUser.id,
-          token: `${uuidv4()}${uuidv4()}`.replace(/-/g, ""),
-        },
-      });
 
-      const mailOptions = {
-        from: `Email Activation Token <${process.env.NODEMAILER_ADMIN_EMAIL}>`,
-        to: `${email}`,
-        subject: "Activate your Email now to enjoy all the benefits of ....",
-        text: `That was easy! ${process.env.BASE_URL}/auth/activate/${token.token}`,
-      };
-      return new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.error("Error occurred:", error);
-            reject(
-              NextResponse.json({
-                message: "Error occurred: " + error.message,
-                ok: false,
-                status: 500,
-              }),
-            );
-          } else {
-            console.log("Email sent successfully:", info.response);
-            resolve(
-              NextResponse.json({
-                message:
-                  "Verification Email sent successfully. Check out your inbox!",
-                ok: true,
-                status: 200,
-              }),
-            );
-          }
+      if (envVar === "true") {
+        const transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.NODEMAILER_ADMIN_EMAIL,
+            pass: process.env.NODEMAILER_ADMIN_PASS,
+          },
         });
-      });
+        const token = await prisma.activateToken.create({
+          data: {
+            userId: newUser.id,
+            token: `${uuidv4()}${uuidv4()}`.replace(/-/g, ""),
+          },
+        });
+
+        const mailOptions = {
+          from: `Email Activation Token <${process.env.NODEMAILER_ADMIN_EMAIL}>`,
+          to: `${email}`,
+          subject: "Activate your Email now to enjoy all the benefits of ....",
+          text: `That was easy! ${process.env.BASE_URL}/auth/activate/${token.token}`,
+        };
+        return new Promise((resolve, reject) => {
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.error("Error occurred:", error);
+              reject(
+                NextResponse.json({
+                  message: "Error occurred: " + error.message,
+                  ok: false,
+                  status: 500,
+                }),
+              );
+            } else {
+              console.log("Email sent successfully:", info.response);
+              resolve(
+                NextResponse.json({
+                  message:
+                    "Verification Email sent successfully. Check out your inbox!",
+                  ok: true,
+                  status: 200,
+                }),
+              );
+            }
+          });
+        });
+      }
+
+      return NextResponse.json({ message: "ACcount IDK" + account, ok: true, status: 200 })
+
     } else {
       console.error("Account creation failed");
       return NextResponse.json(

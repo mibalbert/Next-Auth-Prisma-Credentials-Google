@@ -24,17 +24,21 @@ const ExpendableCard = ({ data, className }) => {
           ) : (
             <div>
               {!isExpanded ? (
-                <div>
-                  <pre className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-gray-950 overflow-auto rounded-lg bg-gray-950 lg:max-w-3xl">
-                    <div>Current Session</div>
-                    <code>{data ? JSON.stringify(data[0]) : null}</code>
+                <div className="flex flex-col gap-4">
+                  <div className="text-lg ">Current Session</div>
+                  <pre className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-auto rounded-lg bg-gray-950 p-10 scrollbar-thin scrollbar-track-gray-950 scrollbar-thumb-gray-800 lg:max-w-3xl">
+                    <code>
+                      {data ? JSON.stringify(data[0], null, 2) : null}
+                    </code>
                   </pre>
                 </div>
               ) : (
-                <div>
-                  <pre className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-gray-950 overflow-auto rounded-lg bg-gray-950 lg:max-w-3xl">
-                    <div>All your stored Sessions</div>
-                    <code>{data ? JSON.stringify(data) : "Sign-In first"}</code>
+                <div className="flex flex-col gap-4">
+                  <div className="text-lg ">All your stored Sessions</div>
+                  <pre className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-auto rounded-lg bg-gray-950 p-10 scrollbar-thin scrollbar-track-gray-950 scrollbar-thumb-gray-800 lg:max-w-3xl">
+                    <code>
+                      {data ? JSON.stringify(data, null, 2) : "Sign-In first"}
+                    </code>
                   </pre>
                   <br />
                   <div>

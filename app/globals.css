@@ -8,6 +8,56 @@
   box-sizing: border-box;
 }
 
+body {
+  overflow-y: scroll; /* Show scrollbars */
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #717171;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #484848;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #353535;
+}
+
+
+.make-it-glow {
+  border-radius: 10px;
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px -10px #aef4af;
+  }
+  to {
+    box-shadow: 0 0 10px 10px #aef4af;
+  }
+}
+
+.glow-button {
+  --button-background: #09041e;
+  --button-color: #fff;
+  --button-shadow: rgba(33, 4, 104, 0.2);
+  --button-shine-left: rgba(120, 0, 245, 0.5);
+  --button-shine-right: rgba(200, 148, 255, 0.65);
+  --button-glow-start: #B000E8;
+  --button-glow-end: #009FFD;
+
+  /* Rest of your styling... */
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

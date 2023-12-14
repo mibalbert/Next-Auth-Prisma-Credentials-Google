@@ -187,6 +187,28 @@ const SignInForm = ({ setOpen, className }) => {
             </div>
           )}
         </Button>
+        <Button
+          type="button"
+          onClick={() =>
+            signIn("credentials", {
+              email: "admin@gmail.com",
+              password: "123456",
+            })
+          }
+        >
+          Sign-In as ADMIN
+        </Button>
+        <Button
+          type="button"
+          onClick={() =>
+            signIn("credentials", {
+              email: "user1@gmail.com",
+              password: "123456",
+            })
+          }
+        >
+          Sign-In as USER
+        </Button>
         {/* End Form */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

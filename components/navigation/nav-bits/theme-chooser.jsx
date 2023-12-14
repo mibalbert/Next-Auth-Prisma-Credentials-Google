@@ -23,10 +23,10 @@ export function ModeToggle() {
         <Button
           variant="icon"
           size="icon"
-          className="flex items-center justify-center w-full h-full"
+          className="relative flex h-full w-full items-center justify-center "
         >
-          <Sun className="w-4 h-4 transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0 " />
-          <Moon className="absolute w-4 h-4 transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" />
+          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all duration-1000 dark:-rotate-90 dark:scale-0 " />
+          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all duration-1000 dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
@@ -37,9 +37,9 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setTheme("dark")}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        {/* <DropdownMenuItem onClick={() => setTheme("system")}>
           System
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

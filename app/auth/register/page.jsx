@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import SendEmailActivate from "@/components/form/send-email-activate";
 import { registerNewUser } from "@/app/actions/actions";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -58,7 +59,7 @@ const Register = () => {
         </span>
       </Link>
       <section className="grid h-full min-h-screen w-full grid-cols-12 items-center">
-        <div className="col-span-9">
+        <div className="col-span-8">
           {responseObj.ok ? (
             <div className="mx-auto w-full max-w-md space-y-2">
               <div className="mx-auto flex w-full items-center gap-2">
@@ -240,8 +241,20 @@ const Register = () => {
             </form>
           )}
         </div>
-        <div className="col-span-3 h-full w-full bg-neutral-300">
-          ASdasdasdas
+        <div className="relative col-span-4 h-full w-full bg-gray-50">
+          <Image
+            src="/rick.webp"
+            alt="rick"
+            width={500}
+            height={1000}
+            className="h-full w-full object-cover object-center"
+          />
+          {/* <div className="relative flex h-full w-full flex-col items-center justify-center">
+            <div>
+              <h1 className="text-center text-5xl font-bold">Ship faster</h1>
+              <Icons.santa className="z-50 h-full   w-full" />
+            </div>
+          </div> */}
         </div>
       </section>
     </div>
